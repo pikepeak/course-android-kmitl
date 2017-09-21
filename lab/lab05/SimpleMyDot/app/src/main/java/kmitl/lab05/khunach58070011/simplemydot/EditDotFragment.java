@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 import kmitl.lab05.khunach58070011.simplemydot.model.Dot;
 
-import static kmitl.lab05.khunach58070011.simplemydot.MainActivity.Gdot;
 import static kmitl.lab05.khunach58070011.simplemydot.MainActivity.check;
 
 
@@ -24,34 +23,26 @@ public class EditDotFragment extends Fragment implements View.OnClickListener{
 
     private Dot dot;
     private View rootView;
-    private EditDotListener editDotListener;
     public EditDotFragment() {
         // Required empty public constructor
-    }
-    public interface EditDotListener{
-        void backToMain(Dot back);
-    }
-
-    public EditDotListener getEditDotListener() {
-        return editDotListener;
-    }
-
-    public void setEditDotListener(EditDotListener editDotListener) {
-        this.editDotListener = editDotListener;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            this.dot = getArguments().getParcelable("dot");
+        if(savedInstanceState != null){
+            dot = savedInstanceState.getParcelable("dot");
+        }else{
+            dot = getArguments().getParcelable("dot");
         }
+
     }
 
-    public Fragment newInstance(Dot value) {
+    public Fragment newInstance(EditDotListener listener, Dot value) {
         Bundle args = new Bundle();
         EditDotFragment fragment = new EditDotFragment();
+        fragment.setListener(listener);
         args.putParcelable("dot", value);
         fragment.setArguments(args);
         return fragment;
@@ -62,11 +53,11 @@ public class EditDotFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_edit_dot, container, false);
-        Button cancelBtn = rootView.findViewById(R.id.cancel);
         Button doneBtn = rootView.findViewById(R.id.done);
+        Button setposBtn = rootView.findViewById(R.id.setpos);
 
-        cancelBtn.setOnClickListener(this);
         doneBtn.setOnClickListener(this);
+        setposBtn.setOnClickListener(this);
 
         EditText redDot = rootView.findViewById(R.id.r_editText);
         EditText greenDot = rootView.findViewById(R.id.g_editText);
@@ -75,13 +66,14 @@ public class EditDotFragment extends Fragment implements View.OnClickListener{
         EditText xDot = rootView.findViewById(R.id.x_editText);
         EditText yDot = rootView.findViewById(R.id.y_editText);
 
-        int red = this.dot.getR();
-        int green = this.dot.getG();
-        int blue = this.dot.getB();
-        int rad = this.dot.getRadius();
-        int x = this.dot.getCenterX();
-        int y = this.dot.getCenterY();
-
+        int red = dot.getR();
+        int green = dot.getG();
+        int blue = dot.getB();
+        int rad = dot.getRadius();
+        int x;
+        int y;
+        x = dot.getCenterX();
+        y = dot.getCenterY();
         redDot.setText(String.valueOf(red));
         greenDot.setText(String.valueOf(green));
         blueDot.setText(String.valueOf(blue));
@@ -92,14 +84,51 @@ public class EditDotFragment extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
+    public interface EditDotListener{
+        void showMapDot(Dot take);
+    }
+    private EditDotListener listener;
+    public EditDotListener getListener() {
+        return listener;
+    }
 
+    public void setListener(EditDotListener listener) {
+        this.listener = listener;
+    }
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.cancel) {
-            onCancel();
-        } else if (view.getId() == R.id.done) {
+        if (view.getId() == R.id.done) {
             onDone();
+        } else if (view.getId() == R.id.setpos){
+            onSetPot();
         }
+    }
+    private void onSetPot(){
+        EditText redDot = rootView.findViewById(R.id.r_editText);
+        EditText greenDot = rootView.findViewById(R.id.g_editText);
+        EditText blueDot = rootView.findViewById(R.id.b_editText);
+        EditText radDot = rootView.findViewById(R.id.rad_editText);
+        EditText xDot = rootView.findViewById(R.id.x_editText);
+        EditText yDot = rootView.findViewById(R.id.y_editText);
+
+        dot.setCenterX(Integer.parseInt(xDot.getText().toString()));
+        dot.setCenterY(Integer.parseInt(yDot.getText().toString()));
+        dot.setR((Integer.parseInt(redDot.getText().toString())));
+        dot.setG((Integer.parseInt(greenDot.getText().toString())));
+        dot.setB((Integer.parseInt(blueDot.getText().toString())));
+        dot.setRadius((Integer.parseInt(radDot.getText().toString())));
+        dot.setId(this.dot.getId());
+        listener.showMapDot(dot);
+        //getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new mapDotFragment().newInstance(dot)).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onResume() {
+        EditText xDot = rootView.findViewById(R.id.x_editText);
+        EditText yDot = rootView.findViewById(R.id.y_editText);
+        xDot.setText(String.valueOf(dot.getCenterX()));
+        yDot.setText(String.valueOf(dot.getCenterY()));
+        super.onResume();
     }
 
     private void onDone() {
@@ -110,18 +139,13 @@ public class EditDotFragment extends Fragment implements View.OnClickListener{
         EditText xDot = rootView.findViewById(R.id.x_editText);
         EditText yDot = rootView.findViewById(R.id.y_editText);
 
-        Gdot.setCenterX(Integer.parseInt(xDot.getText().toString()));
-        Gdot.setCenterY(Integer.parseInt(yDot.getText().toString()));
-        Gdot.setR((Integer.parseInt(redDot.getText().toString())));
-        Gdot.setG((Integer.parseInt(greenDot.getText().toString())));
-        Gdot.setB((Integer.parseInt(blueDot.getText().toString())));
-        Gdot.setRadius((Integer.parseInt(radDot.getText().toString())));
-        Gdot.setId(this.dot.getId());
-        check = 1;
-        getFragmentManager().popBackStackImmediate();
-    }
-    private void onCancel() {
-        check = 0;
+        dot.setCenterX(Integer.parseInt(xDot.getText().toString()));
+        dot.setCenterY(Integer.parseInt(yDot.getText().toString()));
+        dot.setR((Integer.parseInt(redDot.getText().toString())));
+        dot.setG((Integer.parseInt(greenDot.getText().toString())));
+        dot.setB((Integer.parseInt(blueDot.getText().toString())));
+        dot.setRadius((Integer.parseInt(radDot.getText().toString())));
+        dot.setId(this.dot.getId());
         getFragmentManager().popBackStackImmediate();
     }
 }

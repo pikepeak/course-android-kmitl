@@ -117,6 +117,10 @@ public class Dot implements Parcelable {
     public void setCenterX(int centerX) {
         this.centerX = centerX;
     }
+    public void setCenterXdot(int centerX) {
+        this.centerX = centerX;
+        listener.onDotChanged(this);
+    }
 
     public int getCenterY() {
         return centerY;
@@ -124,6 +128,10 @@ public class Dot implements Parcelable {
 
     public void setCenterY(int centerY) {
         this.centerY = centerY;
+    }
+    public void setCenterYdot(int centerY) {
+        this.centerY = centerY;
+        listener.onDotChanged(this);
     }
 
     public int getRadius() {

@@ -16,6 +16,7 @@ import kmitl.lab05.khunach58070011.simplemydot.model.SetDot;
 public class DotView extends View {
     private Paint paint;
     private SetDot set;
+    private Dot dot;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -25,6 +26,9 @@ public class DotView extends View {
                 paint.setColor(Color.argb(100, item.getR(), item.getG(), item.getB()));
                 canvas.drawCircle(item.getCenterX(),item.getCenterY(),item.getRadius(),paint);
             }
+        }else if(this.dot != null){
+            paint.setColor(Color.argb(100, dot.getR(), dot.getG(), dot.getB()));
+            canvas.drawCircle(dot.getCenterX(),dot.getCenterY(),dot.getRadius(),paint);
         }
     }
 
@@ -47,6 +51,8 @@ public class DotView extends View {
     public void setDot(SetDot set) {
         this.set = set;
     }
+
+    public void setDot(Dot dot) {this.dot = dot;}
 
     public interface OnDotViewPressListener{
         void onDotViewPressed(int x, int y);

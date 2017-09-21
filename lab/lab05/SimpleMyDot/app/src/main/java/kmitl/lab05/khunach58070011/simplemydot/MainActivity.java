@@ -7,8 +7,7 @@ import android.os.Bundle;
 
 import kmitl.lab05.khunach58070011.simplemydot.model.Dot;
 
-public class MainActivity extends AppCompatActivity implements DotViewFragment.DotViewListener{
-    public static Dot Gdot = new Dot(0, 0, 50);
+public class MainActivity extends AppCompatActivity implements DotViewFragment.DotViewListener, EditDotFragment.EditDotListener {
     public static int check = 0;
 
     @Override
@@ -36,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements DotViewFragment.D
 
     @Override
     public void showEditDot(Dot take) {
-        viewFragment(new EditDotFragment().newInstance(take));
+        viewFragment(new EditDotFragment().newInstance((EditDotFragment.EditDotListener) MainActivity.this, take));
+    }
+
+    @Override
+    public void showMapDot(Dot take) {
+        viewFragment(new mapDotFragment().newInstance(take));
     }
 }

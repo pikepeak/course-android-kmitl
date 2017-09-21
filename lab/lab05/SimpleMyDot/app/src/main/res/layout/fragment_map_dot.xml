@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kmitl.lab05.khunach58070011.simplemydot.mapDotFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <kmitl.lab05.khunach58070011.simplemydot.view.DotView
+        android:id="@+id/dotviewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="done" />
+
+</FrameLayout>

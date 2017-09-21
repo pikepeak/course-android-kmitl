@@ -26,7 +26,6 @@ import kmitl.lab05.khunach58070011.simplemydot.model.DotFile;
 import kmitl.lab05.khunach58070011.simplemydot.model.SetDot;
 import kmitl.lab05.khunach58070011.simplemydot.view.DotView;
 
-import static kmitl.lab05.khunach58070011.simplemydot.MainActivity.Gdot;
 import static kmitl.lab05.khunach58070011.simplemydot.MainActivity.check;
 
 
@@ -37,8 +36,7 @@ public class DotViewFragment extends Fragment implements SetDot.onDotChangedList
 
     private DotView dotView;
     private Dot dot;
-    private Dot Editdot;
-    private SetDot setDot = new SetDot(this);
+    private SetDot setDot;
     private DotViewListener listener;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -51,9 +49,10 @@ public class DotViewFragment extends Fragment implements SetDot.onDotChangedList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            this.Editdot = getArguments().getParcelable("dot");
+        if(savedInstanceState != null){
+            setDot = savedInstanceState.getParcelable("setDot");
+        }else{
+            setDot = new SetDot(this);
         }
     }
 
@@ -71,7 +70,6 @@ public class DotViewFragment extends Fragment implements SetDot.onDotChangedList
         View rootView = inflater.inflate(R.layout.fragment_dot_view, container, false);
 
         dotView = (DotView) rootView.findViewById(R.id.dotView);
-        dot = new Dot (0, 0 ,50);
         dotView.setOnDotViewPressListener(this);
         Button changeTextInB = rootView.findViewById(R.id.button);
         changeTextInB.setOnClickListener(new View.OnClickListener() {
@@ -97,20 +95,19 @@ public class DotViewFragment extends Fragment implements SetDot.onDotChangedList
         });
         dotView.setDot(setDot);
         dotView.invalidate();
-        if (check == 1){
-            dot = setDot.getMarkDotbyid(Gdot.getId());
-            dot.setRadius(Gdot.getRadius());
-            dot.setCenterX(Gdot.getCenterX());
-            dot.setCenterY(Gdot.getCenterY());
-            dot.setR(Gdot.getR());
-            dot.setG(Gdot.getG());
-            dot.setB(Gdot.getB());
-            setDot.setSet(dot);
-            check = 0;
-        }
+
         return rootView;
 
     }
+
+    @Override
+    public void onResume() {
+        if (check == 1){
+
+        }
+        super.onResume();
+    }
+
     public void onDot(int x, int y){
         if (setDot.removesomedot(this, (int) x, (int) y)){
             dot = new Dot (0, 0 ,50);
