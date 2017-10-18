@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import kmitl.lab07.khunach58070011.mylazyinstagram.adapter.PostAdapter;
 import kmitl.lab07.khunach58070011.mylazyinstagram.api.LazyInstagramApi;
@@ -33,11 +34,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button button;
     private int userSelect = 0;
     private String[] items;
+    private View loadingScreen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AVLoadingIndicatorView avi = new AVLoadingIndicatorView(this);
+        avi.show();
+
+        loadingScreen = findViewById(R.id.loadingall);
         Spinner dropdown = (Spinner)findViewById(R.id.spinner1);
         items = new String[]{"android", "nature", "cartoon"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -47,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
     private void getUserProfile(String name){
+        loadingScreen.setVisibility(View.VISIBLE);
         OkHttpClient client = new OkHttpClient.Builder().build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
@@ -106,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Glide.with(MainActivity.this).load(userProfile.getUrlProfile()).into(imageProfile);
         PostAdapter postAdapter = new PostAdapter(MainActivity.this, userProfile.getPosts());
         onSwithView(postAdapter);
+        loadingScreen.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
