@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,7 +25,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private UserProfile userProfile;
@@ -35,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private int userSelect = 0;
     private String[] items;
     private View loadingScreen;
+    private boolean[] checkUser = {false, false, false};
+    private Button buttonFollow;
 
 
     @Override
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         loadingScreen = findViewById(R.id.loadingall);
         Spinner dropdown = (Spinner)findViewById(R.id.spinner1);
+        buttonFollow = (Button) findViewById(R.id.follow);
+        buttonFollow.setText("follow");
         items = new String[]{"android", "nature", "cartoon"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Glide.with(MainActivity.this).load(userProfile.getUrlProfile()).into(imageProfile);
         PostAdapter postAdapter = new PostAdapter(MainActivity.this, userProfile.getPosts());
         onSwithView(postAdapter);
-        loadingScreen.setVisibility(View.INVISIBLE);
+        displayFollow();
 
     }
 
@@ -155,5 +157,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void displayFollow(){
+        if (checkUser[userSelect] == true){
+            buttonFollow.setText("Following");
+        }else{
+            buttonFollow.setText("follow");
+        }
+        loadingScreen.setVisibility(View.INVISIBLE);
+    }
+    public void onfollow(View view) {
+        loadingScreen.setVisibility(View.VISIBLE);
+        if (checkUser[userSelect] == false){
+            checkUser[userSelect] = true;
+        }else{
+            checkUser[userSelect] = false;
+        }
+        displayFollow();
     }
 }
