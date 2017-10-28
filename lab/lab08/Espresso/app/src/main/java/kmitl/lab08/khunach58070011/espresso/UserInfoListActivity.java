@@ -53,7 +53,7 @@ public class UserInfoListActivity extends AppCompatActivity {
                 preference.remove();
                 Intent i = getBaseContext().getPackageManager()
                         .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });
@@ -72,3 +72,4 @@ public class UserInfoListActivity extends AppCompatActivity {
 
     }
 }
+

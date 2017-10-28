@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setUserInfo(String name, String age) {
+    public void setUserInfo(String name, String age) {
         UserInfo userInfo = new UserInfo();
         userInfo.setName(name);
         userInfo.setAge(age);

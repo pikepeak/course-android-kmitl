@@ -8,13 +8,14 @@ import com.google.gson.Gson;
 public class CommonSharePreference {
     public static final String NAME = "UserInfoApp";
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     public CommonSharePreference(Context context) {
         sharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     public void save(String key, Object data) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String string = gson.toJson(data);
         editor.putString(key, string);
@@ -31,7 +32,6 @@ public class CommonSharePreference {
         return result;
     }
     public void remove(){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
     }
