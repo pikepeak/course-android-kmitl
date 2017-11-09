@@ -85,7 +85,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setColorText(){
         if (income == 0 && total == 0){
             totalShow.setTextColor(Color.parseColor("#db1a1a"));
-        }else{
+        }else if (income == 0){
+            totalShow.setTextColor(Color.parseColor("#db1a1a"));
+        }
+        else{
             percent = 0;
 
             percent =  ((float)(total*100)/(float)income);
